@@ -1,0 +1,57 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-md-6 mb-4">
+        {% if producto.imagen %}
+        <img src="{{ producto.imagen }}" class="img-fluid rounded" alt="{{ producto.nombre }}" style="max-height: 400px; width: 100%; object-fit: contain;">
+        {% else %}
+        <div class="placeholder-img d-flex align-items-center justify-content-center rounded" style="height: 400px;">
+            <i class="bi bi-image text-muted" style="font-size: 5rem;"></i>
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'catalogo' %}">Catálogo</a></li>
+                <li class="breadcrumb-item active">{{ producto.nombre }}</li>
+            </ol>
+        </nav>
+        <h1>{{ producto.nombre }}</h1>
+        <p class="precio-lg mt-3">{{ producto.precio_formateado }}</p>
+        <p class="text-muted">{{ producto.descripcion }}</p>
+
+        {% if producto.stock > 0 %}
+        <p class="text-success">
+            <i class="bi bi-check-circle"></i> En stock ({{ producto.stock }} disponibles)
+        </p>
+
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'agregar_al_carrito' producto.id %}" class="mt-4">
+            {% csrf_token %}
+            <div class="row g-2 align-items-center">
+                <div class="col-auto">
+                    <label for="id_cantidad" class="form-label fw-bold">Cantidad:</label>
+                </div>
+                <div class="col-3">
+                    {{ formulario.cantidad }}
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-primario">
+                        <i class="bi bi-cart-plus"></i> Agregar al Carrito
+                    </button>
+                </div>
+            </div>
+        </form>
+        {% else %}
+        <div class="alert alert-info mt-3">
+            <i class="bi bi-info-circle"></i>
+            <a href="{% url 'iniciar_sesion' %}" class="alert-link">Inicia sesión</a> para agregar productos al carrito.
+        </div>
+        {% endif %}
+        {% else %}
+        <p class="text-danger"><i class="bi bi-x-circle"></i> Producto agotado</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

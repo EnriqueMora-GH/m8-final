@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<h1 class="mb-4">
+    <i class="bi {% if accion == 'Crear' %}bi-plus-circle{% else %}bi-pencil{% endif %}"></i>
+    {{ accion }} Producto
+</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in formulario %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                        <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                        {% endif %}
+                        {% if field.help_text %}
+                        <div class="form-text">{{ field.help_text }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primario">{{ accion }}</button>
+                        <a href="{% url 'gestionar_productos' %}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

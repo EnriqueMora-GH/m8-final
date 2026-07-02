@@ -1,0 +1,49 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="mb-4">
+    <a href="{% url 'mis_ordenes' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Mis Órdenes
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="card-title mb-0">Orden #{{ orden.id }}</h2>
+            <span class="badge {% if orden.estado == 'confirmada' %}bg-success{% elif orden.estado == 'pendiente' %}bg-warning{% elif orden.estado == 'cancelada' %}bg-danger{% else %}bg-info{% endif %} fs-6">
+                {{ orden.get_estado_display }}
+            </span>
+        </div>
+        <p class="text-muted">Fecha: {{ orden.fecha_creacion|date:"d/m/Y H:i" }}</p>
+
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-end">Precio Unit.</th>
+                        <th class="text-end">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in orden.items.all %}
+                    <tr>
+                        <td>{{ item.producto.nombre }}</td>
+                        <td class="text-center">{{ item.cantidad }}</td>
+                        <td class="text-end">{{ item.precio_unitario|floatformat:0 }}</td>
+                        <td class="text-end precio">{{ item.subtotal_formateado }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="table-active">
+                        <td colspan="3" class="text-end fw-bold">Total:</td>
+                        <td class="text-end precio-lg fw-bold">{{ orden.total_formateado }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

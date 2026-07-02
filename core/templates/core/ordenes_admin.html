@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<h1 class="mb-4"><i class="bi bi-receipt"></i> Órdenes</h1>
+
+{% if ordenes %}
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th># Orden</th>
+                <th>Usuario</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th class="text-end">Total</th>
+                <th class="text-center">Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for orden in ordenes %}
+            <tr>
+                <td>{{ orden.id }}</td>
+                <td>{{ orden.usuario.username }}</td>
+                <td>{{ orden.fecha_creacion|date:"d/m/Y H:i" }}</td>
+                <td>
+                    <span class="badge {% if orden.estado == 'confirmada' %}bg-success{% elif orden.estado == 'pendiente' %}bg-warning{% elif orden.estado == 'cancelada' %}bg-danger{% else %}bg-info{% endif %}">
+                        {{ orden.get_estado_display }}
+                    </span>
+                </td>
+                <td class="text-end precio">{{ orden.total_formateado }}</td>
+                <td class="text-center">
+                    <a href="{% url 'detalle_orden' orden.id %}" class="btn btn-primario btn-sm">
+                        Ver Detalle
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="text-center py-5">
+    <i class="bi bi-inbox display-1 text-muted"></i>
+    <p class="lead mt-3">No hay órdenes registradas.</p>
+</div>
+{% endif %}
+
+<div class="mt-3">
+    <a href="{% url 'panel_admin' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Volver al Panel
+    </a>
+</div>
+{% endblock %}
