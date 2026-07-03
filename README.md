@@ -30,7 +30,7 @@ Una plataforma de comercio electrónico funcional (MVP) construida con Django y 
 
 ```bash
 # Clonar el repositorio
-git clone <repo-url>
+git clone https://github.com/EnriqueMora-GH/m8-final.git
 cd m8-final
 
 # Crear y activar entorno virtual
@@ -69,4 +69,4 @@ Este proyecto usa SQLite3 como base de datos única, lo que simplifica el despli
 
 ## Enlace
 
-[Ver aplicación en Render](#) (pendiente de despliegue)
+Pendiente
